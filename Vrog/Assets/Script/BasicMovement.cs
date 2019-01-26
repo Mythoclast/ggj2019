@@ -16,13 +16,18 @@ public class BasicMovement : MonoBehaviour {
 	public UnityEvent OnJumpVertical;
 	public UnityEvent OnJumpHorizontal;
 
+	public bool IsStopped{get;set;}
+
 	void Awake(){
 		rb2D = GetComponent<Rigidbody2D>();
+		IsStopped = false;
 	}
 
 	public void Walk(float factor){
-		rb2D.AddForce(Vector2.right * moveSpeed * factor, ForceMode2D.Force);
-		OnWalk.Invoke(Mathf.Abs(factor));
+		if(!IsStopped){
+			rb2D.AddForce(Vector2.right * moveSpeed * factor, ForceMode2D.Force);
+			OnWalk.Invoke(Mathf.Abs(factor));
+		}
 	}
 
 	public void Jump(float factor){
