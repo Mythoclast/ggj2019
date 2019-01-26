@@ -7,20 +7,39 @@ public class CharacterAnimationControl : MonoBehaviour {
 
 	public BasicMovement BasicMovement{get;private set;}
 
+	public Rigidbody2D Rigidbody2D{get;private set;}
+
 	void Awake () {
 		Animator = GetComponent<Animator>();
 		BasicMovement = GetComponent<BasicMovement>();
+		Rigidbody2D = GetComponent<Rigidbody2D>();
 	}
-
+	private bool direction;
+	public bool Direction { get{return direction; } private set {
+		if(direction != value)
+			direction = value;
+			Animator.SetBool("Direction",value);
+		}
+	}
 	private float speedFactor = 0.0f;
 
 	public float SpeedFactor { 
 		get{return speedFactor;} 
 		private set{
 			speedFactor = value;
-			Animator.SetFloat("Walk",value);
+			Animator.SetFloat("Walk",Mathf.Abs(value));
 		} 
 	}
+	private float verticalVelocity;
+	public float VerticalVelocity{
+		get{return verticalVelocity;}
+		private set{
+			verticalVelocity = value;
+			Animator.SetFloat("VerticalVelocity",verticalVelocity);
+		}
+	}
+
+
 
 	public bool IsGrounded {  
 		set{	Animator.SetBool("IsGrounded", value);} }
@@ -43,6 +62,27 @@ public class CharacterAnimationControl : MonoBehaviour {
 	
 	void Update(){
 		SpeedFactor = Input.GetAxis("Horizontal");
+		
+
+
+
+//------------------------------------------
+		
+		if(SpeedFactor>0)
+			BasicMovement.LookLeft();
+
+		
+		else if(SpeedFactor<0)
+			BasicMovement.LookRight();
+
+//------------------------------------------
+
+
+
+
+
+	
+		VerticalVelocity = Rigidbody2D.velocity.y;
 		if(Mathf.Abs(SpeedFactor) > 0.2f)
 			BasicMovement.Walk(SpeedFactor);
 		
