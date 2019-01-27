@@ -7,11 +7,14 @@ public class Cannon : MonoBehaviour {
 	public Transform[] ammoSlots;
 	public float maxForce;
 	public float maxDelayTime;
-	///How long does it take for the bullet to consider colisions agains the player after launched;
 	public float colisionDelay;
-	public Vector2 target;
-	public Stack<Rigidbody2D> ammo;
 
+	[HideInInspector]
+	public Vector2 Target {get;set;}
+	public Transform targetTransform;
+	[HideInInspector]
+	public List<Bullet> ammo;
+	public int ammoMax;
 	public UnityEvent OnStartAiming;
 	public UnityEvent OnStopAiming;
 	public UnityEvent OnTossing;
@@ -27,6 +30,7 @@ public class Cannon : MonoBehaviour {
 			}
 		}
 	}
+
 	private bool isTossing;
 	public bool IsTossing{
 		get{	return isTossing; } 
@@ -39,34 +43,60 @@ public class Cannon : MonoBehaviour {
 	}
 
 	public IEnumerator LaunchTadpole(){
-		float timer = Time.time;
-		if(OnStartAiming != null)
-			OnStartAiming.Invoke();
+		if(ammo.Count > 0){
+			Bullet bullet = PopAmmo();
+			float timer = Time.time;
+			bullet.Bind(targetTransform);
+	
+			if(OnStartAiming != null)
+				OnStartAiming.Invoke();
 
-		yield return new WaitUntil(() => { return !IsAiming || IsTossing; } );
+			yield return new WaitUntil(() => { 
+				targetTransform.position = Target.normalized * Vector3.Distance(targetTransform.position, transform.position);
+				return !IsAiming || IsTossing; 
+				}
+			);
 
-		if(IsTossing){
-			Toss(Mathf.Clamp01( (Time.time - timer) / maxDelayTime ));
-			IsTossing = false;
+			if(IsTossing){
+				Toss(Mathf.Clamp01( (Time.time - timer) / maxDelayTime ),bullet);
+				IsTossing = false;
 
-		}else if(OnStopAiming != null)
-			OnStopAiming.Invoke();
-
-		IsAiming = false;
+			}else if(OnStopAiming != null){
+				OnStopAiming.Invoke();
+				if(ammo.Count < ammoMax)
+					AddAmmo(bullet);
+				else{
+					bullet.Release();
+				}
+			}
+			IsAiming = false;
+		}
 	}
-	public IEnumerator DelayBulletColision(Rigidbody2D bullet){
-		yield return new WaitForSeconds(colisionDelay);
-		bullet.gameObject.layer = 15;
-	}
-	public void Toss(float strengh){
-		Rigidbody2D bullet = ammo.Pop();
-
-		bullet.AddForce((strengh * maxForce) * target, ForceMode2D.Impulse);
-		StartCoroutine(DelayBulletColision(bullet));
-
+	public void Toss(float strengh, Bullet bullet){
+		bullet.Release();
+		bullet.rb.AddForce((strengh * maxForce) * (targetTransform.position), ForceMode2D.Impulse);
+		bullet.Invoke("Activate", colisionDelay);
 		if(OnTossing != null)
 			OnTossing.Invoke();
-	
 	}
+	public void AddAmmo(Bullet bullet){
+		bullet.Bind(ammoSlots[ammo.Count]);
+		ammo.Add(bullet);
+	}
+	public Bullet PopAmmo(){
+		Bullet bullet = ammo[0]; 
+		ammo.RemoveAt(0);
+		for (int i = 0; i < ammo.Count; i++)
+			ammo[i].magnetTarget = ammoSlots[i];
+		return bullet;
+	}
+	 void OnCollisionEnter2D(Collision2D col)
+    {	
+		if(ammo.Count < ammoMax){
+			Bullet b = col.gameObject.GetComponent<Bullet>();
+			if(b != null)
+				AddAmmo(b);
+		}
+    }
 
 }

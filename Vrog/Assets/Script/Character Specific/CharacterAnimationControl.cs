@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class CharacterAnimationControl : MonoBehaviour {
@@ -97,5 +98,5 @@ public class CharacterAnimationControl : MonoBehaviour {
 	public void ExecuteJump(){
 		BasicMovement.Jump(SpeedFactor);
 	}
-	
+
 }

@@ -7,15 +7,9 @@ public class BasicMovement : MonoBehaviour {
 	private Rigidbody2D rb2D;
 	public SpriteRenderer spriteRenderer;
 	public float moveSpeed;
-	public float jumpVerticalForceUpward;
-	public float jumpHorizontalForceForward;
-	public float jumpHorizontalForceUpward;
-
+	public float jumpForceUpward;
 	public FloatUnityEvent OnWalk;
 	public UnityEvent OnJump;
-	public UnityEvent OnJumpVertical;
-	public UnityEvent OnJumpHorizontal;
-
 	public bool IsStopped{get;set;}
 
 	void Awake(){
@@ -42,23 +36,13 @@ public class BasicMovement : MonoBehaviour {
 	}
 
 	public void Jump(float factor){
-		Vector2 force = rb2D.velocity;;
 		if(OnJump != null)
 			OnJump.Invoke();
-			
-		if(Mathf.Abs(factor)>0){
-			force.y = jumpHorizontalForceUpward;
-			rb2D.velocity = force;
-			rb2D.AddForce((jumpHorizontalForceForward * ((factor>0f)?1f:-1f))* Vector2.right, ForceMode2D.Impulse);
 
-			if(OnJumpVertical != null)
-				OnJumpVertical.Invoke();
-		}else{
-			force.y = jumpVerticalForceUpward;
-			rb2D.velocity = force;
-			if(OnJumpHorizontal != null)
-				OnJumpHorizontal.Invoke();
-		}
+		Vector2 force = rb2D.velocity;;
+		force.y = jumpForceUpward;
+		rb2D.velocity = force;
+
 	}
 
 }
