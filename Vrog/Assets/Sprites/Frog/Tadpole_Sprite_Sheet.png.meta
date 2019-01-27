@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 227e462e2394eb24cb82fb6a1c923f74
-timeCreated: 1548619166
+guid: b8ade2fee87650a4aba5e1ca7b949919
+timeCreated: 1548618914
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -27,7 +27,7 @@ TextureImporter:
   textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: 0
+    filterMode: -1
     aniso: -1
     mipBias: -1
     wrapMode: 1
@@ -37,8 +37,8 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 9
-  spritePivot: {x: 0.5, y: 0.1282051}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaUsage: 1
@@ -53,15 +53,7 @@ TextureImporter:
   - buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-  - buildTarget: Standalone
-    maxTextureSize: 2048
-    textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -69,28 +61,7 @@ TextureImporter:
   spriteSheet:
     serializedVersion: 2
     sprites: []
-    outline:
-    - - {x: 60, y: -26}
-      - {x: 57, y: -26}
-      - {x: 36, y: -25}
-      - {x: -4, y: -25}
-      - {x: -15, y: -28}
-      - {x: -17, y: -30}
-      - {x: -17, y: -32}
-      - {x: -19, y: -29}
-      - {x: -24, y: -25}
-      - {x: -48, y: -25}
-      - {x: -49, y: -28}
-      - {x: -50, y: -32}
-      - {x: -54, y: -25}
-      - {x: -55, y: -25}
-      - {x: -63, y: -27}
-      - {x: -64, y: -28}
-      - {x: -64, y: -57}
-      - {x: -62, y: -64}
-      - {x: 64, y: -64}
-      - {x: 64, y: -33}
-      - {x: 62, y: -28}
+    outline: []
   spritePackingTag: 
   userData: 
   assetBundleName: 
