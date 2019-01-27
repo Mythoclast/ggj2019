@@ -67,9 +67,9 @@ public class BasicMovement : MonoBehaviour {
 
 	void OnDrawGizmos(){
 		Gizmos.color = Color.red;
-		Gizmos.DrawLine(transform.position, (jumpVerticalDirection.normalized * jumpVerticalStrengh*0.1f) + transform.position.ToVector2());
+		Gizmos.DrawLine(transform.position, (jumpVerticalDirection.normalized * jumpVerticalStrengh).normalized + transform.position.ToVector2());
 		Gizmos.color = Color.green;
-		Gizmos.DrawLine(transform.position, (jumpHorizontalDirection.normalized * jumpHorizontalStrengh*0.1f) + transform.position.ToVector2());
+		Gizmos.DrawLine(transform.position, (jumpHorizontalDirection.normalized * jumpHorizontalStrengh).normalized + transform.position.ToVector2());
 	}
 }
 
