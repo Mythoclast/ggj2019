@@ -12,7 +12,8 @@ public class Killable : MonoBehaviour {
    
     public void Kill(){
         IsDead = true;
-        OnDie.Invoke();
+        if(OnDie!=null)
+            OnDie.Invoke();
     }
 
     public void Wipe(){

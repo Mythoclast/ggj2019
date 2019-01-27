@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class BasicMovement : MonoBehaviour {
 	private Rigidbody2D rb2D;
-		public SpriteRenderer spriteRenderer;
+	public SpriteRenderer spriteRenderer;
 	public float moveSpeed;
 	public Vector2 jumpVerticalDirection;
 	public float jumpVerticalStrengh;
@@ -43,13 +43,17 @@ public class BasicMovement : MonoBehaviour {
 	}
 
 	public void Jump(float factor){
-		OnJump.Invoke();
+		if(OnJump != null)
+			OnJump.Invoke();
+			
 		if(Mathf.Abs(factor)>0){
 			rb2D.AddForce(jumpVerticalDirection * jumpVerticalStrengh, ForceMode2D.Impulse);
-			OnJumpHorizontal.Invoke();
+			if(OnJumpHorizontal != null)
+				OnJumpHorizontal.Invoke();
 		}else{
 			rb2D.AddForce(jumpHorizontalDirection * jumpHorizontalStrengh, ForceMode2D.Impulse);
-			OnJumpVertical.Invoke();
+			if(OnJumpVertical != null)
+				OnJumpVertical.Invoke();
 		}
 	}
 
