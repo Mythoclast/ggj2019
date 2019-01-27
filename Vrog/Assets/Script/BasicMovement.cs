@@ -43,25 +43,33 @@ public class BasicMovement : MonoBehaviour {
 	}
 
 	public void Jump(float factor){
+		factor = (factor>0f)?1f:-1f;
+		
+		
+		Vector2 force;
 		if(OnJump != null)
 			OnJump.Invoke();
 			
 		if(Mathf.Abs(factor)>0){
-			rb2D.AddForce(jumpVerticalDirection * jumpVerticalStrengh, ForceMode2D.Impulse);
-			if(OnJumpHorizontal != null)
-				OnJumpHorizontal.Invoke();
-		}else{
-			rb2D.AddForce(jumpHorizontalDirection * jumpHorizontalStrengh, ForceMode2D.Impulse);
+			force = jumpHorizontalDirection * jumpHorizontalStrengh;
+			force.x *= factor;
+			rb2D.AddForce(force, ForceMode2D.Impulse);
 			if(OnJumpVertical != null)
 				OnJumpVertical.Invoke();
+		}else{
+			force = jumpVerticalDirection * jumpVerticalStrengh;
+			force.x *= factor;
+			rb2D.AddForce(jumpVerticalDirection * jumpVerticalStrengh*factor, ForceMode2D.Impulse);
+			if(OnJumpHorizontal != null)
+				OnJumpHorizontal.Invoke();
 		}
 	}
 
 	void OnDrawGizmos(){
 		Gizmos.color = Color.red;
-		Gizmos.DrawLine(transform.position, jumpVerticalDirection.normalized * jumpVerticalStrengh);
+		Gizmos.DrawLine(transform.position, (jumpVerticalDirection.normalized * jumpVerticalStrengh*0.1f) + transform.position.ToVector2());
 		Gizmos.color = Color.green;
-		Gizmos.DrawLine(transform.position, jumpHorizontalDirection.normalized * jumpHorizontalStrengh);
+		Gizmos.DrawLine(transform.position, (jumpHorizontalDirection.normalized * jumpHorizontalStrengh*0.1f) + transform.position.ToVector2());
 	}
 }
 

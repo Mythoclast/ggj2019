@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-//[RequireComponent(typeof(Animator), typeof(BasicMovement))]
+
 public class CharacterAnimationControl : MonoBehaviour {
 
 	public Animator Animator {get; private set;}
@@ -9,7 +9,11 @@ public class CharacterAnimationControl : MonoBehaviour {
 
 	public Rigidbody2D Rigidbody2D{get;private set;}
 
+	public Cannon Cannon{get;private set;}
+
+
 	void Awake () {
+		Cannon = GetComponent<Cannon>();
 		Animator = GetComponent<Animator>();
 		BasicMovement = GetComponent<BasicMovement>();
 		Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -60,7 +64,7 @@ public class CharacterAnimationControl : MonoBehaviour {
 		}
 	}
 	
-	void Update(){
+	void FixedUpdate(){
 		SpeedFactor = Input.GetAxis("Horizontal");
 		
 
@@ -76,13 +80,14 @@ public class CharacterAnimationControl : MonoBehaviour {
 			BasicMovement.LookRight();
 
 //------------------------------------------
-
-
-
+		if(Input.GetAxis("Aim")>0.5f){
+			
+		}
 
 
 	
 		VerticalVelocity = Rigidbody2D.velocity.y;
+
 		if(Mathf.Abs(SpeedFactor) > 0.2f)
 			BasicMovement.Walk(SpeedFactor);
 		
