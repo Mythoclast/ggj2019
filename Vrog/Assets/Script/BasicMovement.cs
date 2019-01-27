@@ -7,10 +7,9 @@ public class BasicMovement : MonoBehaviour {
 	private Rigidbody2D rb2D;
 	public SpriteRenderer spriteRenderer;
 	public float moveSpeed;
-	public Vector2 jumpVerticalDirection;
-	public float jumpVerticalStrengh;
-	public Vector2 jumpHorizontalDirection;
-	public float jumpHorizontalStrengh;
+	public float jumpVerticalForceUpward;
+	public float jumpHorizontalForceForward;
+	public float jumpHorizontalForceUpward;
 
 	public FloatUnityEvent OnWalk;
 	public UnityEvent OnJump;
@@ -43,34 +42,25 @@ public class BasicMovement : MonoBehaviour {
 	}
 
 	public void Jump(float factor){
-		factor = (factor>0f)?1f:-1f;
-		
-		
-		Vector2 force;
+		Vector2 force = rb2D.velocity;;
 		if(OnJump != null)
 			OnJump.Invoke();
 			
 		if(Mathf.Abs(factor)>0){
-			force = jumpHorizontalDirection * jumpHorizontalStrengh;
-			force.x *= factor;
-			rb2D.AddForce(force, ForceMode2D.Impulse);
+			force.y = jumpHorizontalForceUpward;
+			rb2D.velocity = force;
+			rb2D.AddForce((jumpHorizontalForceForward * ((factor>0f)?1f:-1f))* Vector2.right, ForceMode2D.Impulse);
+
 			if(OnJumpVertical != null)
 				OnJumpVertical.Invoke();
 		}else{
-			force = jumpVerticalDirection * jumpVerticalStrengh;
-			force.x *= factor;
-			rb2D.AddForce(jumpVerticalDirection * jumpVerticalStrengh*factor, ForceMode2D.Impulse);
+			force.y = jumpVerticalForceUpward;
+			rb2D.velocity = force;
 			if(OnJumpHorizontal != null)
 				OnJumpHorizontal.Invoke();
 		}
 	}
 
-	void OnDrawGizmos(){
-		Gizmos.color = Color.red;
-		Gizmos.DrawLine(transform.position, (jumpVerticalDirection.normalized * jumpVerticalStrengh).normalized + transform.position.ToVector2());
-		Gizmos.color = Color.green;
-		Gizmos.DrawLine(transform.position, (jumpHorizontalDirection.normalized * jumpHorizontalStrengh).normalized + transform.position.ToVector2());
-	}
 }
 
 public class FloatUnityEvent:UnityEvent<float>{}

@@ -4,10 +4,13 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class Cannon : MonoBehaviour {
+	public Transform[] ammoSlots;
 	public float maxForce;
 	public float maxDelayTime;
+	///How long does it take for the bullet to consider colisions agains the player after launched;
+	public float colisionDelay;
 	public Vector2 target;
-	public Stack<Collider2D> ammo;
+	public Stack<Rigidbody2D> ammo;
 
 	public UnityEvent OnStartAiming;
 	public UnityEvent OnStopAiming;
@@ -15,9 +18,7 @@ public class Cannon : MonoBehaviour {
 
 	private bool isAiming;
 	public bool IsAiming { 
-		get{
-			return isAiming;
-		}
+		get{	return isAiming;}
 		set{
 			if(ammo.Count > 0 && isAiming != value){
 				isAiming = value;
@@ -53,13 +54,19 @@ public class Cannon : MonoBehaviour {
 
 		IsAiming = false;
 	}
+	public IEnumerator DelayBulletColision(Rigidbody2D bullet){
+		yield return new WaitForSeconds(colisionDelay);
+		bullet.gameObject.layer = 15;
+	}
 	public void Toss(float strengh){
-		Collider2D bullet = ammo.Pop();
+		Rigidbody2D bullet = ammo.Pop();
+
+		bullet.AddForce((strengh * maxForce) * target, ForceMode2D.Impulse);
+		StartCoroutine(DelayBulletColision(bullet));
+
 		if(OnTossing != null)
 			OnTossing.Invoke();
-		
-
-		Debug.Log("Tossed");
+	
 	}
 
 }

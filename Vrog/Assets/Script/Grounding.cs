@@ -14,7 +14,6 @@ public class Grounding : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col){
 		IsGrounded = true;
 		OnGround.Invoke();
-
 		foreach (ISteppable trigger in col.GetComponents<ISteppable>())
 			trigger.OnStep();
 	}
