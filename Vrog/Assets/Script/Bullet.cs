@@ -19,13 +19,13 @@ public class Bullet : MonoBehaviour {
     public void Release(){
         rb.velocity = Vector2.zero;
         col.enabled = true;
-        rb.isKinematic = true;
+        rb.simulated = true;
         magnetTarget = null;
     }
     public void Bind(Transform target){
         rb.velocity = Vector2.zero;
         col.enabled = false;
-        rb.isKinematic = false;
+        rb.simulated = false;
         magnetTarget = target;
     }
     public void Deactivate(){
